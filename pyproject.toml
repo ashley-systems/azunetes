@@ -1,0 +1,13 @@
+[project]
+name = "azunetes"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "google-labs-jules[bot]", email = "161369871+google-labs-jules[bot]@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "ansible>=13.4.0",
+    "ansible-lint>=26.3.0",
+]
