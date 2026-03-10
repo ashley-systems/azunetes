@@ -11,6 +11,10 @@
   - kubeadm
   - kubernetes の 認証認可
 
+## Assumed OS
+
+- Debian 13 Trixie
+
 ## Phase
 
 - Phase 1: controlplane を構築する
