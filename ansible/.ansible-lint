@@ -6,6 +6,7 @@ profile: null # min, basic, moderate, safety, shared, production
 exclude_paths:
   - .venv
   - .github
+  - playbooks/site.yml # Currently a placeholder
 
 # Rules specific configuration
 # skip_list:

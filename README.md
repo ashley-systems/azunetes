@@ -21,20 +21,23 @@
 - Phase 2: workernode を構築して、controlplane と接続する
 - Phase 3: （オプション）ストレージサーバを構築して、実運用を試す
 
-## Ansible Execution Environment
+## Development
 
-Ansible の実行環境は `ansible/` 配下で `uv` を前提に管理する。
-Python は 3.14 も候補だが、collection や周辺ツールとの互換性を考慮して、当面は 3.12 を基準にする。
+### Requirements
 
-```sh
+- [uv](https://docs.astral.sh/uv/)
+
+### Lint
+
+Ansible の静的解析には `ansible-lint` を利用します。
+
+```bash
+# ansible ディレクトリへ移動
 cd ansible
-uv python install 3.12
+
+# 依存関係のインストール
 uv sync
-```
 
-動作確認:
-
-```sh
-cd ansible
-uv run --frozen ansible-playbook --version
+# lint の実行
+uv run ansible-lint
 ```
