@@ -1,0 +1,5 @@
+---
+# 一時的に空のエントリポイント playbook を lint 対象から除外する
+# playbooks/site.yml に実際の play を実装したら、この exclude を見直すこと
+exclude_paths:
+  - playbooks/site.yml

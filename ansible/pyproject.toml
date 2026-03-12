@@ -5,4 +5,5 @@ description = "Ansible execution environment for azunetes"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "ansible==13.4.0",
+    "ansible-lint==26.3.0",
 ]

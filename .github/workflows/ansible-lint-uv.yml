@@ -1,0 +1,41 @@
+name: Ansible Lint (uv)
+
+on:
+  pull_request:
+    paths:
+      - "ansible/**"
+      - ".github/workflows/ansible-lint-uv.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ansible-lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ansible
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          working-directory: ansible
+          enable-cache: true
+          cache-python: true
+
+      - name: Install Python 3.12
+        run: uv python install 3.12
+
+      - name: Check lockfile
+        run: uv lock --check
+
+      - name: Sync locked environment
+        run: uv sync --frozen
+
+      - name: Run ansible-lint
+        run: uv run --frozen ansible-lint
+
