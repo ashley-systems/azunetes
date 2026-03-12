@@ -37,5 +37,5 @@ jobs:
         run: uv sync --frozen
 
       - name: Run ansible-lint
-        run: uv run --frozen ansible-lint playbooks/site.yml
+        run: uv run --frozen ansible-lint
 
