@@ -1,14 +1,6 @@
 name: ansible-lint
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'ansible/**'
-      - '.github/workflows/ansible-lint.yml'
-      - '.ansible-lint'
-      - 'pyproject.toml'
   pull_request:
     branches:
       - main
