@@ -1,0 +1,23 @@
+name: Lint Shell Scripts
+
+on:
+  pull_request:
+    paths:
+      - "**/*.sh"
+      - "**/*.bash"
+      - ".github/workflows/shellcheck.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@2.0.0
