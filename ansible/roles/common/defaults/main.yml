@@ -1,0 +1,5 @@
+---
+common_hostname: ""
+common_timezone: "Asia/Tokyo"
+common_users: []
+common_disable_swap: true

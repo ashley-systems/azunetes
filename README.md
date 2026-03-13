@@ -15,6 +15,26 @@
 
 - Debian 13 Trixie
 
+## Common Host Settings
+
+共通ホスト設定は `ansible/playbooks/site.yml` から `ansible/roles/common` を適用する。
+ホストごとの差分は `ansible/inventories/*/host_vars/<host>.yml` に置く。
+確認手順は `docs/runbooks/common-host-settings.md` を参照する。
+
+例:
+
+```yaml
+common_hostname: "cp01"
+common_users:
+  - name: ansible
+    comment: "Ansible automation user"
+    groups:
+      - sudo
+    shell: /bin/bash
+```
+
+`common_timezone` は既定で `Asia/Tokyo`、`common_disable_swap` は既定で `true`。
+
 ## Phase
 
 - Phase 1: controlplane を構築する

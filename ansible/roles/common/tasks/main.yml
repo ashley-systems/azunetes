@@ -1,0 +1,82 @@
+---
+- name: Validate common role inputs
+  ansible.builtin.assert:
+    that:
+      - common_hostname | length > 0
+    fail_msg: "common_hostname must be set for each host."
+    quiet: true
+
+- name: Validate common_users entries
+  ansible.builtin.assert:
+    that:
+      - item.name is defined
+      - item.name | length > 0
+    fail_msg: "Each common_users entry must define a non-empty name."
+    quiet: true
+  loop: "{{ common_users }}"
+  loop_control:
+    label: "{{ item.name | default('undefined') }}"
+
+- name: Set hostname
+  ansible.builtin.hostname:
+    name: "{{ common_hostname }}"
+    use: systemd
+
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ common_timezone }}"
+
+- name: Ensure managed users exist
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment | default(omit) }}"
+    shell: "{{ item.shell | default(omit) }}"
+    groups: "{{ item.groups | default(omit) }}"
+    append: "{{ item.append | default(true) }}"
+    create_home: "{{ item.create_home | default(true) }}"
+    state: present
+  loop: "{{ common_users }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Manage swap settings
+  when: common_disable_swap
+  block:
+    - name: Collect active swap devices
+      ansible.builtin.command:
+        argv:
+          - swapon
+          - --show=NAME
+          - --noheadings
+          - --raw
+      register: common_active_swap
+      changed_when: false
+
+    - name: Disable active swap
+      ansible.builtin.command:
+        argv:
+          - swapoff
+          - -a
+      when: common_active_swap.stdout | trim != ""
+      changed_when: true
+
+    - name: Collect swap entries from fstab
+      ansible.builtin.command:
+        argv:
+          - awk
+          - '($1 !~ /^#/ && $3 == "swap") {print $1 "\t" $2 "\t" $3}'
+          - /etc/fstab
+      register: common_fstab_swap_entries
+      changed_when: false
+
+    - name: Remove swap entries from fstab
+      ansible.posix.mount:
+        path: "{{ item_fields[1] }}"
+        src: "{{ item_fields[0] }}"
+        fstype: "{{ item_fields[2] }}"
+        state: absent_from_fstab
+      loop: "{{ common_fstab_swap_entries.stdout_lines }}"
+      loop_control:
+        label: "{{ item_fields[0] }}"
+      vars:
+        item_fields: "{{ item.split('\t') }}"

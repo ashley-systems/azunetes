@@ -1,0 +1,8 @@
+---
+common_hostname: "local-k8s-node"
+common_users:
+  - name: ansible
+    comment: "Ansible automation user"
+    groups:
+      - sudo
+    shell: /bin/bash
