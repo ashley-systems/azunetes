@@ -18,7 +18,7 @@
 ## VM Bootstrap
 
 VM 払い出し後の初期化は `scripts/bootstrap-ansible-user.sh` を利用する。
-手順の詳細は `docs/runbooks/bootstrap-vm-for-ansible.md` を参照する。
+手順の詳細は `scripts/bootstrap-ansible-user.md` を参照する。
 
 ## Phase
 
