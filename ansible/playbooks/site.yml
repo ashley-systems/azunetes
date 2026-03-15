@@ -6,3 +6,17 @@
 
   roles:
     - role: common
+
+- name: Install Kubernetes base components (kubelet / kubectl)
+  hosts: all
+  become: true
+  roles:
+    - role: kubernetes_apt_repo
+    - role: kubelet_kubectl
+
+- name: Install kubeadm on control plane nodes
+  hosts: controlplane
+  become: true
+  roles:
+    - role: kubernetes_apt_repo
+    - role: kubeadm

@@ -1,0 +1,12 @@
+---
+# Kubernetes APT リポジトリのバージョンや URL に関するデフォルト値
+
+kubernetes_apt_repo_version: "v1.35"
+
+kubernetes_apt_repo_key_url: "https://pkgs.k8s.io/core:/stable:/{{ kubernetes_apt_repo_version }}/deb/Release.key"
+
+kubernetes_apt_repo_keyring_dir: "/etc/apt/keyrings"
+
+kubernetes_apt_repo_keyring_path: "{{ kubernetes_apt_repo_keyring_dir }}/kubernetes-apt-keyring.gpg"
+
+kubernetes_apt_repo_filename: "kubernetes"

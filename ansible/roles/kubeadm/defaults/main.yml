@@ -1,0 +1,4 @@
+---
+# Debian 13 Trixie を前提とした kubeadm 導入 role のデフォルト値
+
+kubeadm_package_name: "kubeadm"

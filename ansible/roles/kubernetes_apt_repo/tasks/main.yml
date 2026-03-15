@@ -1,0 +1,19 @@
+---
+- name: Ensure APT keyring directory exists
+  ansible.builtin.file:
+    path: "{{ kubernetes_apt_repo_keyring_dir }}"
+    state: directory
+    mode: "0755"
+- name: Download Kubernetes APT repository key and convert to keyring
+  ansible.builtin.shell: |
+    set -o errexit -o nounset -o pipefail
+    curl -fsSL "{{ kubernetes_apt_repo_key_url }}" | gpg --dearmor -o "{{ kubernetes_apt_repo_keyring_path }}"
+  args:
+    creates: "{{ kubernetes_apt_repo_keyring_path }}"
+
+- name: Configure Kubernetes APT repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by={{ kubernetes_apt_repo_keyring_path }}] https://pkgs.k8s.io/core:/stable:/{{ kubernetes_apt_repo_version }}/deb/ /"
+    filename: "{{ kubernetes_apt_repo_filename }}"
+    state: present
+  notify: Update APT package cache

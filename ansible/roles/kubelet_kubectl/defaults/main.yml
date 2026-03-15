@@ -1,0 +1,6 @@
+---
+# Debian 13 Trixie を前提とした kubelet / kubectl 導入 role のデフォルト値
+
+kubelet_kubectl_packages:
+  - "kubelet"
+  - "kubectl"

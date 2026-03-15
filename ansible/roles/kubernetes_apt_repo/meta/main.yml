@@ -1,0 +1,11 @@
+---
+galaxy_info:
+  role_name: kubernetes_apt_repo
+  author: azunetes
+  description: Configure Kubernetes APT repository for Debian-based systems.
+  license: MIT
+  min_ansible_version: "2.15"
+  platforms:
+    - name: Debian
+      versions: ["all"]
+dependencies: []
