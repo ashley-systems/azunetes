@@ -1,4 +1,8 @@
 ---
 # Debian 13 Trixie を前提とした kubeadm 導入 role のデフォルト値
+# Kubernetes v1.35.2 を前提にバージョン固定
 
 kubeadm_package_name: "kubeadm"
+
+# 固定する Kubernetes バージョン（Debian パッケージの完全版。kubeadm / kubelet / kubectl は同一に揃える）
+kubeadm_kubernetes_version: "1.35.2-1.1"

@@ -1,6 +1,10 @@
 ---
 # Debian 13 Trixie を前提とした kubelet / kubectl 導入 role のデフォルト値
+# Kubernetes v1.35.2 を前提にバージョン固定
 
 kubelet_kubectl_packages:
   - "kubelet"
   - "kubectl"
+
+# 固定する Kubernetes バージョン（Debian パッケージの完全版。kubeadm / kubelet / kubectl は同一に揃える）
+kubelet_kubectl_kubernetes_version: "1.35.2-1.1"

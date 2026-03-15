@@ -1,7 +1,7 @@
 ---
-- name: Install kubeadm package
+- name: Install kubeadm package at pinned version
   ansible.builtin.apt:
-    name: "{{ kubeadm_package_name }}"
+    name: "{{ kubeadm_package_name }}={{ kubeadm_kubernetes_version }}"
     state: present
     update_cache: false
 

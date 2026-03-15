@@ -20,11 +20,13 @@
 
 ## バージョン管理方針
 
-- Kubernetes のマイナーバージョンは、`roles/kubernetes_apt_repo/defaults/main.yml` の
+- **前提バージョン**: **Kubernetes v1.35.2** を前提に kubeadm / kubelet / kubectl のバージョンを固定しています。
+- リポジトリのマイナーバージョンは、`roles/kubernetes_apt_repo/defaults/main.yml` の
   `kubernetes_apt_repo_version` で指定します (例: `v1.35`)。
-- `kubeadm` / `kubelet` / `kubectl` は同じリポジトリからインストールされ、`apt-mark hold` によって
-  自動アップグレードを防ぎます。
-- バージョンを変更する場合は、`kubernetes_apt_repo_version` を更新したうえで、
+- 各パッケージの固定バージョンは、`roles/kubeadm/defaults/main.yml` の `kubeadm_kubernetes_version` および
+  `roles/kubelet_kubectl/defaults/main.yml` の `kubelet_kubectl_kubernetes_version` で指定します (デフォルト: `1.35.2`)。
+- インストール後は `apt-mark hold` により、意図しないアップグレードを防ぎます。
+- バージョンを変更する場合は、`kubernetes_apt_repo_version` と各 role の `kubernetes_version` を更新したうえで、
   公式ドキュメントに従ってアップグレード手順を検討してください。
 
 ## 実行方法

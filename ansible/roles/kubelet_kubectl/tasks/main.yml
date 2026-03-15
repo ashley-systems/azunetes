@@ -1,7 +1,7 @@
 ---
-- name: Install kubelet and kubectl packages
+- name: Install kubelet and kubectl packages at pinned version
   ansible.builtin.apt:
-    name: "{{ kubelet_kubectl_packages }}"
+    name: "{{ kubelet_kubectl_packages | map('regex_replace', '^(.+)$', '\\1=' ~ kubelet_kubectl_kubernetes_version) | list }}"
     state: present
     update_cache: false
 
