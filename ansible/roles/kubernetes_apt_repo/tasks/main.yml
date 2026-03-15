@@ -25,10 +25,4 @@
     repo: "deb [signed-by={{ kubernetes_apt_repo_keyring_path }}] https://pkgs.k8s.io/core:/stable:/{{ kubernetes_apt_repo_version }}/deb/ /"
     filename: "{{ kubernetes_apt_repo_filename }}"
     state: present
-  register: kubernetes_apt_repo_added
   notify: Update APT package cache
-
-- name: Update APT cache after adding Kubernetes repo
-  ansible.builtin.apt:
-    update_cache: true
-  when: kubernetes_apt_repo_added is changed

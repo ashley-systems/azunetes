@@ -10,13 +10,19 @@
 - name: Install Kubernetes base components (kubelet / kubectl)
   hosts: all
   become: true
-  roles:
-    - role: kubernetes_apt_repo
-    - role: kubelet_kubectl
+  tasks:
+    - ansible.builtin.include_role:
+        name: kubernetes_apt_repo
+    - ansible.builtin.meta: flush_handlers
+    - ansible.builtin.include_role:
+        name: kubelet_kubectl
 
 - name: Install kubeadm on control plane nodes
   hosts: controlplane
   become: true
-  roles:
-    - role: kubernetes_apt_repo
-    - role: kubeadm
+  tasks:
+    - ansible.builtin.include_role:
+        name: kubernetes_apt_repo
+    - ansible.builtin.meta: flush_handlers
+    - ansible.builtin.include_role:
+        name: kubeadm
