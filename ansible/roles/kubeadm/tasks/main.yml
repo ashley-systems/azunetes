@@ -9,4 +9,6 @@
   ansible.builtin.command:
     cmd: "apt-mark hold {{ kubeadm_package_name }}"
   register: kubeadm_apt_mark_result
-  changed_when: "'set on hold' in kubeadm_apt_mark_result.stdout"
+  changed_when: >
+    'set on hold' in (kubeadm_apt_mark_result.stdout | default(''))
+    and 'already' not in (kubeadm_apt_mark_result.stdout | default('') | lower)

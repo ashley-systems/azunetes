@@ -11,5 +11,5 @@
   loop: "{{ kubelet_kubectl_packages }}"
   register: kubelet_kubectl_apt_mark_result
   changed_when: >
-    'set on hold' in (kubelet_kubectl_apt_mark_result.stdout | default('')) or
-    'set on hold' in (item.stdout | default(''))
+    'set on hold' in (kubelet_kubectl_apt_mark_result.stdout | default(''))
+    and 'already' not in (kubelet_kubectl_apt_mark_result.stdout | default('') | lower)
