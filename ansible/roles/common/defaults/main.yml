@@ -1,0 +1,11 @@
+---
+common_hostname: ""
+common_timezone: "Asia/Tokyo"
+# Define per-host users in host_vars, for example:
+# common_users:
+#   - name: ansible
+#     comment: "Ansible automation user"
+#     sudo: true
+#     authorized_keys:
+#       - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGexample ansible@example"
+common_users: []
