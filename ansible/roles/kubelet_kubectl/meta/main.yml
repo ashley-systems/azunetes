@@ -7,6 +7,7 @@ galaxy_info:
   min_ansible_version: "2.15"
   platforms:
     - name: Debian
-      versions: ["all"]
+      versions:
+        - trixie
 dependencies:
   - role: kubernetes_apt_repo
