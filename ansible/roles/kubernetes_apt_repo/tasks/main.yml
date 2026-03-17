@@ -12,7 +12,7 @@
 
 - name: Configure Kubernetes APT repository
   ansible.builtin.apt_repository:
-    repo: "deb [signed-by={{ kubernetes_apt_repo_keyring_path }}] https://pkgs.k8s.io/core:/stable:/{{ kubernetes_apt_repo_version }}/deb/ /"
+    repo: "{{ kubernetes_apt_repo_repo_line }}"
     filename: "{{ kubernetes_apt_repo_filename }}"
     state: present
   notify: Update APT package cache
