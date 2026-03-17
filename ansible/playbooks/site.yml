@@ -8,7 +8,9 @@
     - role: common
 
 - name: Install Kubernetes base components (kubelet / kubectl)
-  hosts: all
+  hosts:
+    - controlplane
+    - worker
   become: true
   tasks:
     - ansible.builtin.include_role:
