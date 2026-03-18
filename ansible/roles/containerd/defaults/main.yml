@@ -1,0 +1,4 @@
+---
+# containerd は Kubernetes 互換性の影響が大きいので、
+# patch 更新は許容しつつ、minor 系列までは固定しておく。
+containerd_minor_version: "2.0"

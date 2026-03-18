@@ -7,6 +7,14 @@
   roles:
     - role: common
 
+- name: Configure Kubernetes nodes
+  hosts:
+    - controlplane
+    - worker
+  become: true
+  roles:
+    - role: containerd
+
 # kubelet_kubectl / kubeadm pull kubernetes_apt_repo via role dependencies; apt install tasks use
 # update_cache: true so package indexes are refreshed before install without relying on flush_handlers.
 - name: Install Kubernetes base components (kubelet / kubectl)
