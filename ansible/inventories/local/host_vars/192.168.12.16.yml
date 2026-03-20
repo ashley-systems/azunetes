@@ -1,0 +1,7 @@
+# Gathering Facts 時の Python 自動検出 WARNING を避ける（リモート実体に合わせる）
+ansible_python_interpreter: /usr/bin/python3.13
+
+common_hostname: "TRIOS-1"
+common_users:
+  - name: ansible
+    sudo: true
