@@ -1,0 +1,130 @@
+---
+- name: Validate common role inputs
+  ansible.builtin.assert:
+    that:
+      - common_hostname is defined
+      - common_hostname is string
+      - common_hostname | length > 0
+    fail_msg: "common_hostname must be defined as a non-empty string for each host."
+    quiet: true
+
+- name: Validate common_users entries
+  ansible.builtin.assert:
+    that:
+      - item.name is defined
+      - item.name is string
+      - item.name | length > 0
+      - item.comment is not defined or item.comment is string
+      - item.sudo is defined
+      - item.sudo | type_debug == "bool"
+      - item.authorized_keys is not defined or item.authorized_keys | type_debug == "list"
+    fail_msg: "Each common_users entry must define name and sudo. comment and authorized_keys are optional."
+    quiet: true
+  loop: "{{ common_users }}"
+  loop_control:
+    label: "{{ item.name | default('undefined') }}"
+
+- name: Validate common_users authorized_keys entries
+  # common_users に定義された全ユーザについて、authorized_keys がある場合だけ 1 件ずつ検証する。
+  # query('subelements', ...) のループ要素は [user, authorized_key] なので、item.1 が公開鍵。
+  # authorized_keys を省略したり空リストにするのは許容するが、指定した各公開鍵に空文字は許容しない。
+  ansible.builtin.assert:
+    that:
+      - item.1 is string
+      - item.1 | length > 0
+    fail_msg: "Each authorized_keys entry must be a non-empty string."
+    quiet: true
+  loop: "{{ query('subelements', common_users, 'authorized_keys', {'skip_missing': True}) }}"
+  loop_control:
+    label: "{{ item.0.name }}"
+
+- name: Set hostname
+  ansible.builtin.hostname:
+    name: "{{ common_hostname }}"
+    use: systemd
+
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ common_timezone }}"
+
+- name: Install basic packages
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+
+- name: Ensure managed users exist
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment | default(omit) }}"
+    shell: /bin/bash # ここでは全ユーザ共通で /bin/bash を指定する
+    create_home: true
+    state: present
+  loop: "{{ common_users }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Ensure sudo users belong to sudo group
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    groups: sudo
+    append: true
+    state: present
+  loop: "{{ common_users | selectattr('sudo') | list }}" # Debian 13 下 では wheel ではなく sudo group
+  loop_control:
+    label: "{{ item.name }}"
+
+# TODO: 必要に応じて sudo グループの剥奪を実装する
+
+- name: Install authorized_keys for managed users
+  ansible.posix.authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ item.1 }}"
+    state: present
+    manage_dir: true # ~/.ssh を管理
+  loop: "{{ query('subelements', common_users, 'authorized_keys', {'skip_missing': True}) }}"
+  loop_control:
+    label: "{{ item.0.name }}"
+
+- name: Manage swap settings
+  block:
+    - name: Collect active swap devices
+      ansible.builtin.command:
+        argv:
+          - swapon
+          - --show=NAME
+          - --noheadings
+          - --raw
+      register: common_active_swap
+      changed_when: false
+
+    - name: Disable active swap
+      ansible.builtin.command:
+        argv:
+          - swapoff
+          - -a
+      when: common_active_swap.stdout | trim != ""
+      changed_when: true
+
+    - name: Collect swap entries from fstab
+      ansible.builtin.command:
+        argv:
+          - awk
+          - '($1 !~ /^#/ && $3 == "swap") {print $1 "\t" $2 "\t" $3}'
+          - /etc/fstab
+      register: common_fstab_swap_entries
+      changed_when: false
+
+    - name: Remove swap entries from fstab
+      ansible.posix.mount:
+        path: "{{ item_fields[1] }}"
+        src: "{{ item_fields[0] }}"
+        fstype: "{{ item_fields[2] }}"
+        state: absent_from_fstab
+      loop: "{{ common_fstab_swap_entries.stdout_lines }}"
+      loop_control:
+        label: "{{ item_fields[0] }}"
+      vars:
+        item_fields: "{{ item.split('\t') }}"

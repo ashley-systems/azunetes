@@ -1,3 +1,8 @@
 ---
-# 下記は例です
-# - import_playbook: prepare-nodes.yml
+- name: Apply common host settings
+  hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: common
