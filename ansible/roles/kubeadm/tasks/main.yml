@@ -3,7 +3,7 @@
   ansible.builtin.apt:
     name: "{{ kubeadm_package_name }}={{ kubeadm_kubernetes_version }}"
     state: present
-    update_cache: false
+    update_cache: true
 
 - name: Hold kubeadm package to prevent unintended upgrades
   ansible.builtin.command:
