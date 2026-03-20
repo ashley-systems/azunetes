@@ -1,3 +1,4 @@
+---
 - name: Ensure APT keyring directory exists
   ansible.builtin.file:
     path: "{{ kubernetes_apt_repo_keyring_dir }}"
