@@ -13,18 +13,24 @@
     - worker
   become: true
   tasks:
-    - ansible.builtin.include_role:
+    - name: Ensure Kubernetes APT repository is configured
+      ansible.builtin.include_role:
         name: kubernetes_apt_repo
-    - ansible.builtin.meta: flush_handlers
-    - ansible.builtin.include_role:
+    - name: Apply any pending handler runs before next roles
+      ansible.builtin.meta: flush_handlers
+    - name: Install kubelet and kubectl
+      ansible.builtin.include_role:
         name: kubelet_kubectl
 
 - name: Install kubeadm on control plane nodes
   hosts: controlplane
   become: true
   tasks:
-    - ansible.builtin.include_role:
+    - name: Ensure Kubernetes APT repository is configured
+      ansible.builtin.include_role:
         name: kubernetes_apt_repo
-    - ansible.builtin.meta: flush_handlers
-    - ansible.builtin.include_role:
+    - name: Apply any pending handler runs before kubeadm role
+      ansible.builtin.meta: flush_handlers
+    - name: Install kubeadm
+      ansible.builtin.include_role:
         name: kubeadm
