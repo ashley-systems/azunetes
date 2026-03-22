@@ -1,0 +1,4 @@
+---
+- name: Update APT package cache
+  ansible.builtin.apt:
+    update_cache: true
