@@ -1,0 +1,13 @@
+---
+galaxy_info:
+  role_name: kubeadm
+  author: azunetes
+  description: Install kubeadm on Debian 13 Trixie control plane nodes.
+  license: MIT
+  min_ansible_version: "2.15"
+  platforms:
+    - name: Debian
+      versions:
+        - trixie
+dependencies:
+  - role: kubernetes_apt_repo

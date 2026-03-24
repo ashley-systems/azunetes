@@ -15,6 +15,17 @@
 
 - Debian 13 Trixie
 
+## VM Bootstrap
+
+VM 払い出し後の初期化は `scripts/bootstrap-ansible-user.sh` を利用する。
+手順の詳細は `scripts/bootstrap-ansible-user.md` を参照する。
+
+## Common Host Settings
+
+共通ホスト設定は `ansible/playbooks/site.yml` から `ansible/roles/common` を適用する。
+ホストごとの差分は `ansible/inventories/*/host_vars/<host>.yml` に置く。
+詳細は `ansible/roles/common/README.md` を参照する。
+
 ## Phase
 
 - Phase 1: controlplane を構築する

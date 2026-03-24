@@ -1,0 +1,15 @@
+---
+- name: Install kubelet and kubectl packages at pinned version
+  ansible.builtin.apt:
+    name: "{{ kubelet_kubectl_packages | map('regex_replace', '^(.+)$', '\\1=' ~ kubelet_kubectl_kubernetes_version) | list }}"
+    state: present
+    update_cache: true
+
+- name: Hold kubelet and kubectl packages to prevent unintended upgrades
+  ansible.builtin.command:
+    cmd: "apt-mark hold {{ item }}"
+  loop: "{{ kubelet_kubectl_packages }}"
+  register: kubelet_kubectl_apt_mark_result
+  changed_when: >
+    'set on hold' in (kubelet_kubectl_apt_mark_result.stdout | default(''))
+    and 'already' not in (kubelet_kubectl_apt_mark_result.stdout | default('') | lower)

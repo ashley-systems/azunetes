@@ -1,6 +1,27 @@
 ---
-# 下記は例です
-# - import_playbook: prepare-nodes.yml
+- name: Apply common host settings
+  hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: common
+
+# kubelet_kubectl / kubeadm pull kubernetes_apt_repo via role dependencies; apt install tasks use
+# update_cache: true so package indexes are refreshed before install without relying on flush_handlers.
+- name: Install Kubernetes base components (kubelet / kubectl)
+  hosts:
+    - controlplane
+    - worker
+  become: true
+  roles:
+    - kubelet_kubectl
+
+- name: Install kubeadm on control plane nodes
+  hosts: controlplane
+  become: true
+  roles:
+    - kubeadm
 
 - name: Apply security settings to control plane nodes
   hosts: controlplane
