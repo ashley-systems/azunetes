@@ -17,4 +17,3 @@
   when: >
     calicoctl_current_version.rc != 0 or
     calicoctl_version not in (calicoctl_current_version.stdout | default(''))
-

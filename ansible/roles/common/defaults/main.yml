@@ -11,4 +11,4 @@ common_timezone: "Asia/Tokyo"
 common_users: []
 
 # Change according to cpu architecuture of hosts.
-cpu_architecuture: amd64
+common_cpu_architecuture: amd64
