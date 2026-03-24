@@ -1,6 +1,6 @@
 ---
 # calicoctl バイナリ設定
-calicoctl_version: "v3.28.0"
+calicoctl_version: "v3.31.0"
 calicoctl_download_url: "https://github.com/projectcalico/calico/releases/download/{{ calicoctl_version }}/calicoctl-linux-amd64"
 calicoctl_install_dir: "/usr/local/bin"
 calicoctl_binary_path: "{{ calicoctl_install_dir }}/calicoctl"
