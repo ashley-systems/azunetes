@@ -1,0 +1,8 @@
+---
+# calicoctl バイナリ設定
+calicoctl_version: "v3.28.0"
+calicoctl_download_url: "https://github.com/projectcalico/calico/releases/download/{{ calicoctl_version }}/calicoctl-linux-amd64"
+calicoctl_install_dir: "/usr/local/bin"
+calicoctl_binary_path: "{{ calicoctl_install_dir }}/calicoctl"
+# SHA256 checksum for version v3.28.0
+calicoctl_checksum: "sha256:5c3d2a55e9b5e3f8e5d5a5b5c5d5e5f5a5b5c5d5e5f5a5b5c5d5e5f5a5b5c5"

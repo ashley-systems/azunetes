@@ -1,0 +1,7 @@
+---
+# Wireguard パッケージ設定
+wireguard_packages:
+  - wireguard
+  - wireguard-tools
+# Pin wireguard packages to specific version to prevent unintended upgrades
+wireguard_debian_version: "*"  # Use latest available version, or specify like "1.0.20230706-1~bpo12+1"

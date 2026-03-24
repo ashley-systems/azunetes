@@ -1,0 +1,11 @@
+---
+galaxy_info:
+  role_name: wireguard
+  author: azunetes
+  description: Install Wireguard on Debian nodes.
+  license: MIT
+  min_ansible_version: "2.15"
+  platforms:
+    - name: Debian
+      versions:
+        - trixie
