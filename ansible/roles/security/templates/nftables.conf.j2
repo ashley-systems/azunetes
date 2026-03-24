@@ -1,0 +1,33 @@
+#!/usr/sbin/nft -f
+# Managed by Ansible - roles/security
+
+# 自テーブルのみ削除（他コンポーネントのテーブルには影響しない）
+table inet ansible_security
+delete table inet ansible_security
+
+table inet ansible_security {
+    chain input {
+        type filter hook input priority 0; policy drop;
+
+        # 確立済みの接続は許可
+        ct state established,related accept
+
+        # ループバックは許可
+        iif "lo" accept
+
+{% for port in security_allowed_tcp_ports %}
+        tcp dport {{ port }} accept
+{% endfor %}
+
+        # それ以外は reject
+        reject with icmpx type admin-prohibited
+    }
+
+    chain forward {
+        type filter hook forward priority 0; policy drop;
+    }
+
+    chain output {
+        type filter hook output priority 0; policy accept;
+    }
+}

@@ -1,3 +1,9 @@
 ---
 # 下記は例です
 # - import_playbook: prepare-nodes.yml
+
+- name: Apply security settings to control plane nodes
+  hosts: controlplane
+  become: true
+  roles:
+    - security
