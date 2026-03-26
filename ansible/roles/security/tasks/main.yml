@@ -1,0 +1,24 @@
+---
+# roles/security/tasks/main.yml
+
+- name: Install nftables
+  ansible.builtin.apt:
+    name: nftables
+    state: present
+    update_cache: true
+
+- name: Deploy nftables configuration
+  ansible.builtin.template:
+    src: nftables.conf.j2
+    dest: /etc/nftables.conf
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+  notify: Reload nftables
+
+- name: Enable and start nftables service
+  ansible.builtin.systemd_service:
+    name: nftables
+    state: started
+    enabled: true

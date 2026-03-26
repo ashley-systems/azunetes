@@ -1,0 +1,7 @@
+---
+# roles/security/handlers/main.yml
+
+- name: Reload nftables
+  ansible.builtin.systemd_service:
+    name: nftables
+    state: reloaded

@@ -22,3 +22,9 @@
   become: true
   roles:
     - kubeadm
+
+- name: Apply security settings to control plane nodes
+  hosts: controlplane
+  become: true
+  roles:
+    - security

@@ -1,0 +1,6 @@
+---
+# roles/security/defaults/main.yml
+
+security_allowed_tcp_ports:
+  - 22 # SSH
+  - 6443 # Kubernetes API Server
