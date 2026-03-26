@@ -23,10 +23,6 @@ table inet ansible_security {
         reject with icmpx type admin-prohibited
     }
 
-    chain forward {
-        type filter hook forward priority 0; policy drop;
-    }
-
     chain output {
         type filter hook output priority 0; policy accept;
     }
