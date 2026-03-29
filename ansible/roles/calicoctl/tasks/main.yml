@@ -13,7 +13,7 @@
     url: "{{ calicoctl_download_url }}"
     dest: "{{ calicoctl_binary_path }}"
     mode: "0755"
-    checksum: "{{ calicoctl_checksum }}"
+    checksum: "{{ calicoctl_checksum[common_cpu_architecuture] }}"
   when: >
     calicoctl_current_version.rc != 0 or
     calicoctl_version not in (calicoctl_current_version.stdout | default(''))
