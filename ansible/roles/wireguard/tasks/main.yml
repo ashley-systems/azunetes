@@ -1,0 +1,15 @@
+---
+- name: Install Wireguard packages
+  ansible.builtin.apt:
+    name: "{{ wireguard_packages }}={{ wireguard_version }}"
+    state: present
+    update_cache: true
+
+- name: Hold Wireguard packages to prevent unintended upgrades
+  ansible.builtin.command:
+    cmd: "apt-mark hold {{ item }}"
+  loop: "{{ wireguard_packages }}"
+  register: wireguard_apt_mark_result
+  changed_when: >
+    'set on hold' in (wireguard_apt_mark_result.stdout | default(''))
+    and 'already' not in (wireguard_apt_mark_result.stdout | default('') | lower)

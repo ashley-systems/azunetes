@@ -9,3 +9,6 @@ common_timezone: "Asia/Tokyo"
 #     authorized_keys:
 #       - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGexample ansible@example"
 common_users: []
+
+# Change according to cpu architecuture of hosts.
+common_cpu_architecuture: amd64

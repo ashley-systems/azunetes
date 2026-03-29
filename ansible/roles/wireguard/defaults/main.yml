@@ -1,0 +1,9 @@
+---
+# Wireguard パッケージ設定
+wireguard_packages:
+  - wireguard
+  - wireguard-tools
+# Pin wireguard packages to specific version to prevent unintended upgrades
+# The official website's installation guide lists v1.0.20220627,
+# but when kyoro actually run `apt list --all-versions wireguard` on Debian 13, only 1.0.20210914-3 is listed.
+wireguard_version: "1.0.20210914-3"

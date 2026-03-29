@@ -36,3 +36,20 @@
   become: true
   roles:
     - security
+
+- name: Install Wireguard on all Kubernetes nodes
+  hosts:
+    - controlplane
+    - worker
+  become: true
+  roles:
+    - wireguard
+
+# Instllation targets are aligned with kubelet and kubectl.
+- name: Install calico managemanet components
+  hosts:
+    - controlplane
+    - worker
+  become: true
+  roles:
+    - calicoctl
