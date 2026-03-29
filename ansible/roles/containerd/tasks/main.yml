@@ -1,0 +1,68 @@
+---
+- name: Install and configure containerd
+  block:
+    - name: Pin containerd package to the configured minor version
+      ansible.builtin.copy:
+        dest: /etc/apt/preferences.d/containerd
+        owner: root
+        group: root
+        mode: "0644"
+        content: |-
+          Package: containerd
+          Pin: version {{ containerd_minor_version }}.*
+          Pin-Priority: 1001
+
+    - name: Install containerd package
+      ansible.builtin.apt:
+        name: containerd
+        state: present
+        update_cache: true
+        allow_downgrade: true
+
+    - name: Ensure containerd config directory exists
+      ansible.builtin.file:
+        path: /etc/containerd
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Generate default containerd config
+      ansible.builtin.command:
+        cmd: containerd config default
+      register: containerd_default_config
+      changed_when: false # ここでは標準出力に生成するだけで、システムは何も変更しない
+
+    # kubelet と containerd の cgroup driver を systemd で揃えるため、
+    # 生成したデフォルト設定の SystemdCgroup を true に固定する。
+    - name: Ensure containerd config format is supported
+      ansible.builtin.assert:
+        that:
+          - "'SystemdCgroup = ' in containerd_default_config.stdout"
+        fail_msg: >-
+          containerd default config format changed. Update the containerd role before
+          applying this playbook.
+
+    - name: Install containerd config
+      ansible.builtin.copy:
+        dest: /etc/containerd/config.toml
+        # containerd のデフォルト設定をベースにしつつ、
+        # Kubernetes と整合するよう SystemdCgroup の行だけ true に書き換える。
+        content: |-
+          {{
+            containerd_default_config.stdout
+            | regex_replace(
+                '(?m)^(\\s*SystemdCgroup = )(true|false)$',
+                '\\1true'
+              )
+          }}
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Restart containerd
+
+    - name: Ensure containerd service is enabled and running
+      ansible.builtin.service:
+        name: containerd
+        state: started
+        enabled: true
