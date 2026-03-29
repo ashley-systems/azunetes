@@ -1,7 +1,7 @@
 ---
 - name: Install Wireguard packages
   ansible.builtin.apt:
-    name: "{{ wireguard_packages }}"
+    name: "{{ wireguard_packages }}={{ wireguard_version }}"
     state: present
     update_cache: true
 
@@ -13,8 +13,3 @@
   changed_when: >
     'set on hold' in (wireguard_apt_mark_result.stdout | default(''))
     and 'already' not in (wireguard_apt_mark_result.stdout | default('') | lower)
-
-- name: Enable Wireguard kernel module
-  community.general.modprobe:
-    name: wireguard
-    state: present
